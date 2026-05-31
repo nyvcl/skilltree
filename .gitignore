@@ -1,0 +1,20 @@
+# Maven build output
+target/
+
+# IDE/editor state
+.idea/
+.vscode/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local runtime/log output
+logs/
+*.log
+*.tmp
+
+# Local environment files
+.env
+.env.*

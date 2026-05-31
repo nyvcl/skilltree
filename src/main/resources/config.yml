@@ -1,0 +1,937 @@
+# ClassSystem Configuration
+# Each class defines a display name, lore, starter item, LP group, and skill tree.
+
+# ---- World Restriction ----
+# List every world name where ClassSystem commands and GUIs are active.
+# Leave the list empty to allow all worlds.
+valid-worlds:
+  - world
+  - world_nether
+  - world_the_end
+
+classes:
+  melee:
+    display-name: "§6Warrior"
+    lp-group: "melee"
+    starter-item: IRON_SWORD
+    starter-item-name: "§6Iron Sword"
+    extra-starter: null
+    extra-starter-amount: 0
+    lore:
+      - "§7A master of close combat."
+      - "§7High defense and raw power."
+    tree:
+      trunk-upgrades:
+        - slot: 50
+          display-name: "§6Hardened Strikes"
+          lore:
+            - "§7+15% melee damage."
+            - "§8Passive — always active."
+          money-cost: 500
+        - slot: 41
+          display-name: "§6Combat Rhythm"
+          lore:
+            - "§7Each melee hit reduces"
+            - "§7active cooldowns by 0.3s."
+            - "§8Passive — always active."
+          money-cost: 1000
+      trunk-milestone:
+        slot: 32
+        display-name: "§6Warrior's Resolve"
+        lore:
+          - "§7Milestone — +20% knockback"
+          - "§7resistance. Unlocks branches."
+          - "§8Passive — always active."
+        item: NETHER_STAR
+        money-cost: 2000
+        lp-group: "melee_warriors_resolve"
+      branch-a:
+        upgrades:
+          - slot: 33
+            display-name: "§cBloodlust"
+            lore:
+              - "§7Killing an enemy grants"
+              - "§7Speed II for 2 seconds."
+              - "§8Passive — always active."
+            money-cost: 750
+        milestone:
+          slot: 34
+          display-name: "§cWar Cry"
+          lore:
+            - "§6Berserker Branch Milestone"
+            - "§7Apply Slowness II + Glowing"
+            - "§7to all enemies within 5 blocks"
+            - "§7for 4 seconds."
+            - "§8Active — sneak + right-click sword."
+            - "§860s cooldown."
+          item: NETHERITE_AXE
+          money-cost: 3000
+          lp-group: "melee_war_cry"
+        pre-subclass-upgrade:
+          slot: 25
+          display-name: "§cReckless Charge"
+          lore:
+            - "§7Your first hit after sprinting"
+            - "§7deals +4 bonus damage."
+            - "§8Passive — always active."
+          money-cost: 1000
+        subclass-a:
+          id: "warlord"
+          display-name: "§cThe Warlord"
+          lp-group: "warlord"
+          milestone-slot: 6
+          milestone-item: NETHERITE_CHESTPLATE
+          milestone-item-name: "§cThe Warlord"
+          milestone-lore:
+            - "§7A walking siege engine."
+            - "§7The lower your HP, the harder"
+            - "§7you are to kill."
+            - "§7Unlocks: Juggernaut + Unstoppable Force."
+          milestone-money-cost: 5000
+          pre-subclass-upgrade:
+            slot: 16
+            display-name: "§cFrenzy State"
+            lore:
+              - "§7Each kill within 10s of the last"
+              - "§7stacks +5% damage (max 3 stacks)."
+              - "§7Stacks reset after 10s of no kills."
+              - "§8Passive — always active."
+            money-cost: 2000
+          upgrades:
+            - slot: 15
+              display-name: "§cJuggernaut"
+              lore:
+                - "§7Gain Resistance II while"
+                - "§7below 50% HP."
+                - "§8Passive — always active."
+              money-cost: 1500
+        subclass-b:
+          id: "hexblade"
+          display-name: "§cThe Hexblade"
+          lp-group: "hexblade"
+          milestone-slot: 8
+          milestone-item: NETHERITE_SWORD
+          milestone-item-name: "§cThe Hexblade"
+          milestone-lore:
+            - "§7A dark warrior who trades"
+            - "§7life force for devastating strikes."
+            - "§7Every fight is a gamble."
+            - "§7Unlocks: Blood Price + Death Pact."
+          milestone-money-cost: 5000
+          pre-subclass-upgrade:
+            slot: 16
+            display-name: "§cFrenzy State"
+            lore:
+              - "§7Each kill within 10s of the last"
+              - "§7stacks +5% damage (max 3 stacks)."
+              - "§7Stacks reset after 10s of no kills."
+              - "§8Passive — always active."
+            money-cost: 2000
+          upgrades:
+            - slot: 17
+              display-name: "§cBlood Price"
+              lore:
+                - "§7Sacrifice 1 heart for"
+                - "§7+40% damage on your next hit."
+                - "§8Active — sneak + right-click sword."
+                - "§815s cooldown."
+              money-cost: 1500
+      branch-b:
+        upgrades:
+          - slot: 31
+            display-name: "§bRiposte"
+            lore:
+              - "§7Block at the moment of being"
+              - "§7hit to reflect 2x damage back."
+              - "§7Must be blocking on impact."
+              - "§8Passive — always active."
+            money-cost: 750
+        milestone:
+          slot: 30
+          display-name: "§bMaster's Form"
+          lore:
+            - "§6Duelist Branch Milestone"
+            - "§7Riposte now also grants"
+            - "§7Speed II for 1.5s on trigger."
+            - "§8Passive — always active."
+          item: DIAMOND_SWORD
+          money-cost: 3000
+          lp-group: "melee_masters_form"
+        pre-subclass-upgrade:
+          slot: 21
+          display-name: "§bExploit Weakness"
+          lore:
+            - "§7Your 3rd consecutive hit on"
+            - "§7the same target inflicts"
+            - "§7Weakness II for 3 seconds."
+            - "§8Passive — always active."
+          money-cost: 1000
+        subclass-a:
+          id: "ironclad"
+          display-name: "§bThe Ironclad"
+          lp-group: "ironclad"
+          milestone-slot: 2
+          milestone-item: DIAMOND_CHESTPLATE
+          milestone-item-name: "§bThe Ironclad"
+          milestone-lore:
+            - "§7A fortress in human form."
+            - "§7Positional mastery and"
+            - "§7punishing parries."
+            - "§7Unlocks: Sentinel + Immovable Object."
+          milestone-money-cost: 5000
+          pre-subclass-upgrade:
+            slot: 12
+            display-name: "§bFootwork"
+            lore:
+              - "§7Sneak + right-click sword to"
+              - "§7gain Speed II for 2 seconds."
+              - "§8Active — 8s cooldown."
+            money-cost: 2000
+          upgrades:
+            - slot: 11
+              display-name: "§bSentinel"
+              lore:
+                - "§7Successful Riposte stuns"
+                - "§7the attacker for 2 seconds."
+                - "§8Passive — always active."
+              money-cost: 1500
+        subclass-b:
+          id: "shadowstrike"
+          display-name: "§bThe Shadowstrike"
+          lp-group: "shadowstrike"
+          milestone-slot: 4
+          milestone-item: DIAMOND_AXE
+          milestone-item-name: "§bThe Shadowstrike"
+          milestone-lore:
+            - "§7A blur of motion who is"
+            - "§7never where you expect."
+            - "§7Gone before you can swing back."
+            - "§7Unlocks: Phantom Step + Ghost Strike."
+          milestone-money-cost: 5000
+          pre-subclass-upgrade:
+            slot: 12
+            display-name: "§bFootwork"
+            lore:
+              - "§7Sneak + right-click sword to"
+              - "§7gain Speed II for 2 seconds."
+              - "§8Active — 8s cooldown."
+            money-cost: 2000
+          upgrades:
+            - slot: 13
+              display-name: "§bPhantom Step"
+              lore:
+                - "§7Killing an enemy grants"
+                - "§7Speed III for 3 seconds."
+                - "§8Passive — always active."
+              money-cost: 1500
+
+
+  ranged:
+    display-name: "§bArcher"
+    lp-group: "ranged"
+    starter-item: BOW
+    starter-item-name: "§bHunting Bow"
+    extra-starter: ARROW
+    extra-starter-amount: 64
+    lore:
+      - "§7A master of ranged combat."
+      - "§7Swift and deadly from afar."
+    tree:
+      # ── General Path (Trunk) ────────────────────────────────────────────────
+      trunk-upgrades:
+        - slot: 50
+          display-name: "§bSteady Aim"
+          lore:
+            - "§7Arrows deal +15% damage if you"
+            - "§7haven't moved in the last 1.5s."
+            - "§8Passive — always active."
+          money-cost: 500
+        - slot: 41
+          display-name: "§bQuiver Mastery"
+          lore:
+            - "§7Bow draw speed increased by 20%."
+            - "§7Arrows fired at full charge always."
+            - "§8Passive — always active."
+          money-cost: 1000
+      trunk-milestone:
+        slot: 32
+        display-name: "§bHunter's Mark"
+        lore:
+          - "§7Trunk Milestone"
+          - "§7First arrow hit on a mob marks it"
+          - "§7for 6s — all subsequent hits deal"
+          - "§7+10% bonus damage while marked."
+          - "§8Passive — always active."
+        item: NETHER_STAR
+        money-cost: 2000
+        lp-group: "ranged_hunters_mark"
+      # ── Branch A — Precision / Single-Target ───────────────────────────────
+      branch-a:
+        upgrades:
+          - slot: 33
+            display-name: "§6Eagle Eye"
+            lore:
+              - "§7Increases arrow velocity by 30%"
+              - "§7(flatter arc, easier to hit at range)."
+              - "§8Passive — always active."
+            money-cost: 750
+        milestone:
+          slot: 34
+          display-name: "§6Bullseye"
+          lore:
+            - "§6Precision Branch Milestone"
+            - "§7Headshot detection: hitting the top"
+            - "§720% of a mob's bounding box deals 2x damage."
+            - "§8Passive — always active."
+          item: ARROW
+          money-cost: 3000
+          lp-group: "ranged_bullseye"
+        pre-subclass-upgrade:
+          slot: 25
+          display-name: "§6Armor Pierce"
+          lore:
+            - "§7Arrows ignore 25% of the"
+            - "§7target's armor value."
+            - "§8Passive — always active."
+          money-cost: 1000
+        subclass-a:
+          id: "sniper"
+          display-name: "§6The Sniper"
+          lp-group: "sniper"
+          milestone-slot: 6
+          milestone-item: CROSSBOW
+          milestone-item-name: "§6The Sniper"
+          milestone-lore:
+            - "§7Patient. Lethal. Unstoppable at range."
+            - "§7The longer the shot, the deadlier it is."
+            - "§7Unlocks: Deadeye + Ghost Round."
+          milestone-money-cost: 5000
+          pre-subclass-upgrade:
+            slot: 16
+            display-name: "§6Predator's Focus"
+            lore:
+              - "§7Killing a marked target resets"
+              - "§7your bow draw by 50%."
+              - "§8Passive — chain-shot reward."
+            money-cost: 2000
+          upgrades:
+            - slot: 15
+              display-name: "§6Deadeye"
+              lore:
+                - "§7Arrows deal +5% damage per 5 blocks"
+                - "§7of travel distance (caps at +40% at 40 blocks)."
+                - "§8Passive — always active."
+              money-cost: 1500
+        subclass-b:
+          id: "duelist"
+          display-name: "§6The Duelist"
+          lp-group: "duelist"
+          milestone-slot: 8
+          milestone-item: BOW
+          milestone-item-name: "§6The Duelist"
+          milestone-lore:
+            - "§7Mobile, aggressive, relentless."
+            - "§7Precision without standing still."
+            - "§7Unlocks: Skirmisher + Execute."
+          milestone-money-cost: 5000
+          pre-subclass-upgrade:
+            slot: 16
+            display-name: "§6Predator's Focus"
+            lore:
+              - "§7Killing a marked target resets"
+              - "§7your bow draw by 50%."
+              - "§8Passive — chain-shot reward."
+            money-cost: 2000
+          upgrades:
+            - slot: 17
+              display-name: "§6Skirmisher"
+              lore:
+                - "§7Moving while shooting no longer"
+                - "§7reduces damage (removes Steady Aim penalty)."
+                - "§7Gain +10% move speed for 2s after firing."
+                - "§8Passive — always active."
+              money-cost: 1500
+      # ── Branch B — Suppression / Multi-Target ──────────────────────────────
+      branch-b:
+        upgrades:
+          - slot: 31
+            display-name: "§cVolley Training"
+            lore:
+              - "§7Gain access to a secondary fire:"
+              - "§7sneak + right-click fires 3 arrows"
+              - "§7in a spread for 1.5x arrow cost."
+              - "§8Active — sneak + right-click with bow."
+            money-cost: 750
+        milestone:
+          slot: 30
+          display-name: "§cSuppressing Fire"
+          lore:
+            - "§6Suppression Branch Milestone"
+            - "§7Enemies hit by your arrows have"
+            - "§7movement speed reduced by 20% for 2s."
+            - "§8Passive — always active."
+          item: BOW
+          money-cost: 3000
+          lp-group: "ranged_suppressing_fire"
+        pre-subclass-upgrade:
+          slot: 21
+          display-name: "§cIncendiary Tips"
+          lore:
+            - "§7Arrows have a 30% chance to"
+            - "§7ignite the target for 3 seconds."
+            - "§8Passive — always active."
+          money-cost: 1000
+        subclass-a:
+          id: "bombardier"
+          display-name: "§cThe Bombardier"
+          lp-group: "bombardier"
+          milestone-slot: 2
+          milestone-item: TNT
+          milestone-item-name: "§cThe Bombardier"
+          milestone-lore:
+            - "§7No survivors. No mercy. Just craters."
+            - "§7Every arrow is a tiny bomb."
+            - "§7Unlocks: Explosive Payload + Carpet Bombing."
+          milestone-money-cost: 5000
+          pre-subclass-upgrade:
+            slot: 12
+            display-name: "§cShrapnel Shot"
+            lore:
+              - "§7On mob kill, the killing arrow"
+              - "§7splinters into 2 projectiles that"
+              - "§7deal 30% damage to nearby enemies."
+              - "§8Passive — always active."
+            money-cost: 2000
+          upgrades:
+            - slot: 11
+              display-name: "§cExplosive Payload"
+              lore:
+                - "§7Arrows that hit the ground create"
+                - "§7a small explosion that damages"
+                - "§7nearby mobs (no block damage)."
+                - "§8Passive — always active."
+              money-cost: 1500
+        subclass-b:
+          id: "trapper"
+          display-name: "§cThe Trapper"
+          lp-group: "trapper"
+          milestone-slot: 4
+          milestone-item: STRING
+          milestone-item-name: "§cThe Trapper"
+          milestone-lore:
+            - "§7The battlefield is your chessboard."
+            - "§7Pre-plan. Control. Dominate."
+            - "§7Unlocks: Tangle Shot + Web of Pain."
+          milestone-money-cost: 5000
+          pre-subclass-upgrade:
+            slot: 12
+            display-name: "§cShrapnel Shot"
+            lore:
+              - "§7On mob kill, the killing arrow"
+              - "§7splinters into 2 projectiles that"
+              - "§7deal 30% damage to nearby enemies."
+              - "§8Passive — always active."
+            money-cost: 2000
+          upgrades:
+            - slot: 13
+              display-name: "§cTangle Shot"
+              lore:
+                - "§7Arrows that miss mobs and hit the"
+                - "§7ground leave a snare for 10s."
+                - "§7Mobs that walk over it are rooted for 1.5s."
+                - "§8Passive — always active."
+              money-cost: 1500
+
+  magic:
+    display-name: "§5Mage"
+    lp-group: "magic"
+    starter-item: BLAZE_ROD
+    starter-item-name: "§5Arcane Staff"
+    extra-starter: null
+    extra-starter-amount: 0
+    lore:
+      - "§7A wielder of arcane forces."
+      - "§7Powerful spells. Fragile body."
+      - "§5Right-click staff to cast."
+      - "§5Shift+right-click to charge cast."
+    tree:
+      trunk-upgrades:
+        - slot: 50
+          display-name: "§5Arcane Attunement"
+          lore:
+            - "§7Spell damage +10%."
+            - "§8Passive — always active."
+          money-cost: 500
+        - slot: 41
+          display-name: "§5Mana Efficiency"
+          lore:
+            - "§7Spell cooldowns reduced 15%."
+            - "§8Passive — always active."
+          money-cost: 1000
+      trunk-milestone:
+        slot: 32
+        display-name: "§5Awakening"
+        lore:
+          - "§6Arcane Milestone"
+          - "§7+20% max mana."
+          - "§7Grants a persistent particle aura."
+          - "§7Unlocks both branches."
+        item: NETHER_STAR
+        money-cost: 2000
+        lp-group: "mage_awakening"
+      branch-a:
+        upgrades:
+          - slot: 33
+            display-name: "§cVolatile Casting"
+            lore:
+              - "§715% chance on spell hit"
+              - "§7to deal 1.5x damage."
+              - "§8Passive — always active."
+            money-cost: 750
+        milestone:
+          slot: 34
+          display-name: "§cPyroclasm"
+          lore:
+            - "§6Destruction Branch Milestone"
+            - "§7On kill via spell, trigger a"
+            - "§7no-block-damage explosion (power 2)"
+            - "§7at the target's location."
+            - "§7Unlocks Battlemage & Arcanist."
+          item: BLAZE_POWDER
+          money-cost: 3000
+          lp-group: "mage_pyroclasm"
+        pre-subclass-upgrade:
+          slot: 25
+          display-name: "§cChain Reaction"
+          lore:
+            - "§7On a crit cast proc, find the"
+            - "§7nearest entity within 5 blocks"
+            - "§7and deal half damage to it."
+            - "§8Passive — always active."
+          money-cost: 1000
+        subclass-a:
+          id: "battlemage"
+          display-name: "§cBattlemage"
+          lp-group: "battlemage"
+          milestone-slot: 6
+          milestone-item: IRON_SWORD
+          milestone-item-name: "§cBattlemage"
+          milestone-lore:
+            - "§7Mix melee and magic up close."
+            - "§7Unlocks: Spellblade + Arcane Embodiment."
+          milestone-money-cost: 5000
+          pre-subclass-upgrade:
+            slot: 16
+            display-name: "§cGlass Cannon"
+            lore:
+              - "§7Spell damage +30%."
+              - "§4Incoming damage +20%."
+              - "§8Passive — always active."
+            money-cost: 2000
+          upgrades:
+            - slot: 15
+              display-name: "§cSpellblade"
+              lore:
+                - "§725% chance on melee hit with"
+                - "§7staff to fire a half-damage"
+                - "§7instant spell at the target."
+                - "§8Passive — always active."
+              money-cost: 1500
+        subclass-b:
+          id: "arcanist"
+          display-name: "§5Arcanist"
+          lp-group: "arcanist"
+          milestone-slot: 8
+          milestone-item: AMETHYST_SHARD
+          milestone-item-name: "§5Arcanist"
+          milestone-lore:
+            - "§7Pure ranged magical devastation."
+            - "§7Unlocks: Overload + Singularity."
+          milestone-money-cost: 5000
+          pre-subclass-upgrade:
+            slot: 16
+            display-name: "§cGlass Cannon"
+            lore:
+              - "§7Spell damage +30%."
+              - "§4Incoming damage +20%."
+              - "§8Passive — always active."
+            money-cost: 2000
+          upgrades:
+            - slot: 17
+              display-name: "§5Overload"
+              lore:
+                - "§7Shift+right-click charges up to 2s."
+                - "§7Full charge fires a 2x damage bolt"
+                - "§7with 4-block knockback."
+                - "§8Active — shift+right-click staff."
+              money-cost: 1500
+      branch-b:
+        upgrades:
+          - slot: 31
+            display-name: "§bSlow Field"
+            lore:
+              - "§7Apply Slowness II for 2s"
+              - "§7on every spell hit."
+              - "§8Passive — always active."
+            money-cost: 750
+        milestone:
+          slot: 30
+          display-name: "§bTemporal Grasp"
+          lore:
+            - "§6Arcane Arts Branch Milestone"
+            - "§7Enemies with any active debuff"
+            - "§7from you take 20% bonus damage."
+            - "§7Unlocks Illusionist & Riftwalker."
+          item: CLOCK
+          money-cost: 3000
+          lp-group: "mage_temporal_grasp"
+        pre-subclass-upgrade:
+          slot: 21
+          display-name: "§bGravity Well"
+          lore:
+            - "§730s cooldown."
+            - "§7Spawn a marker at the target"
+            - "§7location that pulls all nearby"
+            - "§7entities toward it for 3 seconds."
+            - "§8Active — right-click staff (no target)."
+          money-cost: 1000
+        subclass-a:
+          id: "illusionist"
+          display-name: "§bIllusionist"
+          lp-group: "illusionist"
+          milestone-slot: 2
+          milestone-item: GLASS
+          milestone-item-name: "§bIllusionist"
+          milestone-lore:
+            - "§7Deception and battlefield control."
+            - "§7Unlocks: Phantasm + Mirror Image."
+          milestone-money-cost: 5000
+          pre-subclass-upgrade:
+            slot: 12
+            display-name: "§bArcane Shackles"
+            lore:
+              - "§720% chance on spell hit to"
+              - "§7freeze target for 1.5 seconds."
+              - "§8Passive — always active."
+            money-cost: 1000
+          upgrades:
+            - slot: 11
+              display-name: "§bPhantasm"
+              lore:
+                - "§730% chance on taking damage:"
+                - "§7teleport 4 blocks in look direction,"
+                - "§7apply Blindness to attacker 2s."
+                - "§8Passive — always active."
+              money-cost: 1500
+        subclass-b:
+          id: "riftwalker"
+          display-name: "§3Riftwalker"
+          lp-group: "riftwalker"
+          milestone-slot: 4
+          milestone-item: ENDER_EYE
+          milestone-item-name: "§3Riftwalker"
+          milestone-lore:
+            - "§7Teleportation and spatial mastery."
+            - "§7Unlocks: Phase Step + Rift Anchor."
+          milestone-money-cost: 5000
+          pre-subclass-upgrade:
+            slot: 12
+            display-name: "§bArcane Shackles"
+            lore:
+              - "§720% chance on spell hit to"
+              - "§7freeze target for 1.5 seconds."
+              - "§8Passive — always active."
+            money-cost: 1000
+          upgrades:
+            - slot: 13
+              display-name: "§3Phase Step"
+              lore:
+                - "§710s cooldown."
+                - "§7Shift+right-click (no charge):"
+                - "§7teleport 6 blocks forward."
+                - "§8Active — shift+right-click staff."
+              money-cost: 1500
+
+  summoner:
+    display-name: "§dSummoner"
+    lp-group: "summoner"
+    starter-item: BONE
+    starter-item-name: "§dSummon Staff"
+    extra-starter: null
+    extra-starter-amount: 0
+    lore:
+      - "§7Commands the restless dead."
+      - "§7Choose Titan mastery or Swarm chaos."
+      - "§dRight-click §7to summon a minion."
+      - "§dRight-click mob §7to mark target (after milestone)."
+      - "§dShift+Right §7for active abilities or dismiss."
+    tree:
+      trunk-upgrades:
+        - slot: 50
+          display-name: "§dSoul Bond"
+          lore:
+            - "§7Passively binds one zombie minion"
+            - "§7to your soul. It persists until killed"
+            - "§7and respawns 30s after death."
+            - "§8Passive — always active."
+          money-cost: 500
+        - slot: 41
+          display-name: "§dGrave Pact"
+          lore:
+            - "§7Your minions deal §c+25% damage§7,"
+            - "§7but when one dies you take §c3 hearts§7"
+            - "§7of damage. Forces careful play."
+            - "§8Passive — always active."
+          money-cost: 1000
+      trunk-milestone:
+        slot: 32
+        display-name: "§dRite of Command"
+        lore:
+          - "§6General Milestone — Unlocks both branches."
+          - "§7Right-click a mob with your staff"
+          - "§7to mark it as your target."
+          - "§7All minions will focus the marked mob."
+          - "§8Active — right-click on a mob."
+          - "§810s cooldown."
+        item: NETHER_STAR
+        money-cost: 2000
+        lp-group: "summoner_rite_of_command"
+      branch-a:
+        upgrades:
+          - slot: 33
+            display-name: "§aRaise Dead"
+            lore:
+              - "§7Increase your max minion count to §a3§7."
+              - "§7Minions have §c-40% health §7but"
+              - "§7respawn in §a15s §7instead of 30s."
+              - "§8Passive — always active."
+            money-cost: 750
+        milestone:
+          slot: 34
+          display-name: "§aPlague Bearer"
+          lore:
+            - "§6Swarm Branch Milestone"
+            - "§7Your minions now apply §2Poison I §7for"
+            - "§73s on hit. Enemies poisoned by minions"
+            - "§7take §c+15% damage §7from all sources."
+            - "§8Passive — always active."
+          item: SPIDER_EYE
+          money-cost: 3000
+          lp-group: "summoner_plague_bearer"
+        pre-subclass-upgrade:
+          slot: 25
+          display-name: "§aTide of Flesh"
+          lore:
+            - "§7Increase your max minion count to §a5§7."
+            - "§7When 3+ minions attack the same target"
+            - "§7simultaneously, that target is §eStunned"
+            - "§7(Mining Fatigue III) for 1.5s."
+            - "§8Passive — always active."
+          money-cost: 1000
+        subclass-a:
+          id: "plaguemaster"
+          display-name: "§2The Plaguemaster"
+          lp-group: "plaguemaster"
+          milestone-slot: 6
+          milestone-item: WITCH_SPAWN_EGG
+          milestone-item-name: "§2The Plaguemaster"
+          milestone-lore:
+            - "§7Your minions are vectors of disease."
+            - "§7Win through attrition. Herd enemies,"
+            - "§7stack poison, then detonate."
+            - "§7Unlocks: Virulent Swarm + Pandemic."
+          milestone-money-cost: 5000
+          pre-subclass-upgrade:
+            slot: 16
+            display-name: "§aExpendable"
+            lore:
+              - "§7When a minion dies, it explodes"
+              - "§7for §c4 hearts §7in a 3-block radius."
+              - "§7You can also manually detonate"
+              - "§7the nearest minion."
+              - "§8Passive death explosion — always active."
+              - "§8Active detonate — Shift+right-click."
+              - "§83s cooldown (manual)."
+            money-cost: 1500
+          upgrades:
+            - slot: 15
+              display-name: "§2Virulent Swarm"
+              lore:
+                - "§7Minions spread §2Poison I §7to nearby"
+                - "§7enemies just by being within 3 blocks"
+                - "§7(no attack required). Poison duration"
+                - "§7increases to §a6s§7."
+                - "§8Passive — always active."
+              money-cost: 2000
+        subclass-b:
+          id: "warchanter"
+          display-name: "§6The Warchanter"
+          lp-group: "warchanter"
+          milestone-slot: 8
+          milestone-item: BLAZE_POWDER
+          milestone-item-name: "§6The Warchanter"
+          milestone-lore:
+            - "§7Your minions feed on chaos."
+            - "§7Their deaths empower the rest."
+            - "§7Throw your horde into enemies recklessly."
+            - "§7Unlocks: Blood Frenzy + Apocalypse Wave."
+          milestone-money-cost: 5000
+          pre-subclass-upgrade:
+            slot: 16
+            display-name: "§aExpendable"
+            lore:
+              - "§7When a minion dies, it explodes"
+              - "§7for §c4 hearts §7in a 3-block radius."
+              - "§7You can also manually detonate"
+              - "§7the nearest minion."
+              - "§8Passive death explosion — always active."
+              - "§8Active detonate — Shift+right-click."
+              - "§83s cooldown (manual)."
+            money-cost: 1500
+          upgrades:
+            - slot: 17
+              display-name: "§6Blood Frenzy"
+              lore:
+                - "§7Each minion that dies gives all"
+                - "§7surviving minions §c+15% attack speed"
+                - "§7and §c+10% damage §7for 10s, stacking."
+                - "§7Dying minions empower the rest."
+                - "§8Passive — always active."
+              money-cost: 2000
+      branch-b:
+        upgrades:
+          - slot: 31
+            display-name: "§cIron Flesh"
+            lore:
+              - "§7Your minion gains §c+100% max health§7"
+              - "§7and full knockback resistance."
+              - "§7It now wears iron armor."
+              - "§8Passive — always active."
+            money-cost: 750
+        milestone:
+          slot: 30
+          display-name: "§cBlood Link"
+          lore:
+            - "§6Titan Branch Milestone"
+            - "§730% of damage your minion takes"
+            - "§7is redirected to you."
+            - "§7In return you §aheal 1 heart §7every 5s"
+            - "§7per living Titan minion."
+            - "§8Passive — always active."
+          item: NETHERITE_AXE
+          money-cost: 3000
+          lp-group: "summoner_blood_link"
+        pre-subclass-upgrade:
+          slot: 21
+          display-name: "§cColossus Strike"
+          lore:
+            - "§7Your Titan minion's attacks apply"
+            - "§7Slowness II for 2s and have a"
+            - "§720% chance to knock enemies back."
+            - "§8Passive — always active."
+          money-cost: 1000
+        subclass-a:
+          id: "guardian"
+          display-name: "§bThe Guardian"
+          lp-group: "guardian"
+          milestone-slot: 4
+          milestone-item: NETHERITE_CHESTPLATE
+          milestone-item-name: "§bThe Guardian"
+          milestone-lore:
+            - "§7Your minion becomes a living shield."
+            - "§7Enemies are forced to target it,"
+            - "§7not you. Stay close for protection."
+            - "§7Unlocks: Sentinel Protocol + Fortress."
+          milestone-money-cost: 5000
+          pre-subclass-upgrade:
+            slot: 12
+            display-name: "§cUndying Titan"
+            lore:
+              - "§7When your Titan minion would die,"
+              - "§7it enters a §6downed state §7for 10s"
+              - "§7— it can't attack but won't fully die,"
+              - "§7giving you a window to save it."
+              - "§8Passive — always active."
+            money-cost: 1500
+          upgrades:
+            - slot: 13
+              display-name: "§bSentinel Protocol"
+              lore:
+                - "§7Your minion permanently taunts"
+                - "§7nearby enemies (they preferentially"
+                - "§7target it over you). You gain"
+                - "§720% damage reduction within 10 blocks."
+                - "§8Passive — always active."
+              money-cost: 2000
+        subclass-b:
+          id: "revenant"
+          display-name: "§5The Revenant"
+          lp-group: "revenant"
+          milestone-slot: 2
+          milestone-item: NETHERITE_SWORD
+          milestone-item-name: "§5The Revenant"
+          milestone-lore:
+            - "§7Your minion becomes an executioner."
+            - "§7Stack Soul Charges by killing enemies,"
+            - "§7then unleash them on a priority target."
+            - "§7Unlocks: Soul Harvest + Death Mark."
+          milestone-money-cost: 5000
+          pre-subclass-upgrade:
+            slot: 12
+            display-name: "§cUndying Titan"
+            lore:
+              - "§7When your Titan minion would die,"
+              - "§7it enters a §6downed state §7for 10s"
+              - "§7— it can't attack but won't fully die,"
+              - "§7giving you a window to save it."
+              - "§8Passive — always active."
+            money-cost: 1500
+          upgrades:
+            - slot: 11
+              display-name: "§5Soul Harvest"
+              lore:
+                - "§7Every time your Titan minion kills"
+                - "§7an enemy, you gain a Soul Charge"
+                - "§7(max 5). Each charge gives §d+5% damage"
+                - "§7to both you and your minion."
+                - "§7Charges decay after 15s of no kills."
+                - "§8Passive — always active."
+              money-cost: 2000
+
+# General upgrades (shown in rows 7-10 of the skill tree, 7 per row)
+general-upgrades:
+  - flag-id: "extra_hearts"
+    display-name: "§6Extra Hearts"
+    lore: ["§7Gain 2 extra hearts."]
+    money-cost: 2000
+    lp-group: "upg_extra_hearts"
+  - flag-id: "speed_boost"
+    display-name: "§6Speed Boost"
+    lore: ["§7Permanent speed increase."]
+    money-cost: 1500
+    lp-group: "upg_speed"
+  - flag-id: "hunger_resist"
+    display-name: "§6Iron Stomach"
+    lore: ["§7Hunger depletes slower."]
+    money-cost: 1000
+    lp-group: "upg_hunger"
+  - flag-id: "fall_resist"
+    display-name: "§6Feather Fall"
+    lore: ["§7Reduced fall damage."]
+    money-cost: 1200
+    lp-group: "upg_fall"
+  - flag-id: "swim_speed"
+    display-name: "§6Aqua Affinity"
+    lore: ["§7Swim faster."]
+    money-cost: 1000
+    lp-group: "upg_swim"
+  - flag-id: "night_vision"
+    display-name: "§6Night Eyes"
+    lore: ["§7See in the dark."]
+    money-cost: 1800
+    lp-group: "upg_nightvision"
+  - flag-id: "fire_resist"
+    display-name: "§6Fire Resistance"
+    lore: ["§7Resist fire damage."]
+    money-cost: 2500
+    lp-group: "upg_fire"

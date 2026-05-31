@@ -1,0 +1,53 @@
+name: ClassSystem
+version: 1.0.0
+main: com.classystem.ClassSystemPlugin
+api-version: '1.21'
+description: A class selection and skill tree system.
+depend:
+  - LuckPerms
+  - Vault
+
+commands:
+  selectclass:
+    description: Open the class selection GUI.
+    usage: /selectclass
+    permission: classsystem.selectclass
+    permission-message: §cYou don't have permission to use this command.
+  skilltree:
+    description: Open your skill tree.
+    usage: /skilltree
+    permission: classsystem.skilltree
+    permission-message: §cYou don't have permission to use this command.
+  resetclass:
+    description: Reset your class (with confirmation).
+    usage: /resetclass [confirm]
+    permission: classsystem.resetclass
+    permission-message: §cYou don't have permission to use this command.
+  classystemreload:
+    description: Reload the ClassSystem config without restarting.
+    usage: /classystemreload
+    aliases: [classsystemreload]
+    permission: classsystem.reload
+    permission-message: §cYou don't have permission to use this command.
+
+permissions:
+  classsystem.*:
+    description: Grants access to all ClassSystem commands.
+    default: op
+    children:
+      classsystem.selectclass: true
+      classsystem.skilltree: true
+      classsystem.resetclass: true
+      classsystem.reload: true
+  classsystem.selectclass:
+    description: Allows a player to open the class selection GUI.
+    default: true
+  classsystem.skilltree:
+    description: Allows a player to open their skill tree.
+    default: true
+  classsystem.resetclass:
+    description: Allows a player to reset their class.
+    default: true
+  classsystem.reload:
+    description: Allows reloading the ClassSystem config.
+    default: op
