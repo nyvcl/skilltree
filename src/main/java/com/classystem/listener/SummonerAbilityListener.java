@@ -170,6 +170,10 @@ public class SummonerAbilityListener implements Listener {
         return "summoner".equals(pdm.getClass(p));
     }
 
+    private boolean isActiveSummoner(Player p) {
+        return isSummoner(p) && plugin.isWorldAllowed(p);
+    }
+
     private boolean holdingStaff(Player p) {
         ItemStack hand = p.getInventory().getItemInMainHand();
         if (hand == null || hand.getType() != Material.BONE || !hand.hasItemMeta()) return false;
@@ -267,8 +271,7 @@ public class SummonerAbilityListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        if (!isSummoner(p)) return;
-        if (!plugin.isWorldAllowed(p)) return;
+        if (!isActiveSummoner(p)) return;
         ensureHasStaff(p);
         new BukkitRunnable() {
             @Override public void run() { startSoulBondIfNeeded(p); }
@@ -282,21 +285,26 @@ public class SummonerAbilityListener implements Listener {
         new BukkitRunnable() {
             @Override public void run() {
                 if (!p.isOnline()) return;
+                removeTrackedMinions(p);
                 if (!plugin.isWorldAllowed(p)) return;
                 ensureHasStaff(p);
-                // Remove all minions on owner death
-                for (UUID uid : new ArrayList<>(getMinions(p))) {
-                    Entity en = Bukkit.getEntity(uid);
-                    if (en != null) en.remove();
-                }
-                playerMinions.remove(p.getUniqueId());
-                soulBondMinion.remove(p.getUniqueId());
-                soulBondRespawnAt.remove(p.getUniqueId());
                 soulCharges.remove(p.getUniqueId());
                 frenzyStacks.remove(p.getUniqueId());
                 startSoulBondIfNeeded(p);
             }
         }.runTaskLater(plugin, 2L);
+    }
+
+    @EventHandler
+    public void onWorldChange(PlayerChangedWorldEvent e) {
+        Player p = e.getPlayer();
+        if (!isSummoner(p)) return;
+        if (!plugin.isWorldAllowed(p)) {
+            removeTrackedMinions(p);
+            return;
+        }
+        ensureHasStaff(p);
+        startSoulBondIfNeeded(p);
     }
 
     private void ensureHasStaff(Player p) {
@@ -317,8 +325,7 @@ public class SummonerAbilityListener implements Listener {
     // ─────────────────────────────────────────────────────────────────────────
 
     private void startSoulBondIfNeeded(Player p) {
-        if (!isSummoner(p) || !hasUpgrade(p, SLOT_SOUL_BOND)) return;
-        if (!plugin.isWorldAllowed(p)) return;
+        if (!isActiveSummoner(p) || !hasUpgrade(p, SLOT_SOUL_BOND)) return;
         if (!isSoulBondRespawnDue(soulBondRespawnAt.get(p.getUniqueId()), now())) return;
         UUID cur = soulBondMinion.get(p.getUniqueId());
         if (cur != null) {
@@ -329,6 +336,7 @@ public class SummonerAbilityListener implements Listener {
     }
 
     private void spawnSoulBondMinion(Player p) {
+        if (!isActiveSummoner(p)) return;
         Location loc = p.getLocation().add(p.getLocation().getDirection().multiply(2));
         loc.setY(p.getLocation().getY());
         Zombie z = buildMinion(p, loc);
@@ -345,7 +353,7 @@ public class SummonerAbilityListener implements Listener {
         soulBondRespawnAt.put(owner.getUniqueId(), now() + 30L * 20L * 50L);
         new BukkitRunnable() {
             @Override public void run() {
-                if (!owner.isOnline() || !hasUpgrade(owner, SLOT_SOUL_BOND)) return;
+                if (!owner.isOnline() || !isActiveSummoner(owner) || !hasUpgrade(owner, SLOT_SOUL_BOND)) return;
                 startSoulBondIfNeeded(owner);
             }
         }.runTaskLater(plugin, 30L * 20L);
@@ -358,7 +366,7 @@ public class SummonerAbilityListener implements Listener {
     @EventHandler
     public void onSwing(PlayerAnimationEvent e) {
         Player p = e.getPlayer();
-        if (!isSummoner(p) || !holdingStaff(p)) return;
+        if (!isActiveSummoner(p) || !holdingStaff(p)) return;
         if (!p.isSneaking()) return;
         if (e.getAnimationType() != PlayerAnimationType.ARM_SWING) return;
 
@@ -368,7 +376,7 @@ public class SummonerAbilityListener implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
         Player p = e.getPlayer();
-        if (!isSummoner(p) || !holdingStaff(p)) return;
+        if (!isActiveSummoner(p) || !holdingStaff(p)) return;
 
         Action action = e.getAction();
         boolean isRight = action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK;
@@ -942,7 +950,7 @@ public class SummonerAbilityListener implements Listener {
         }
 
         // ── B) Owner takes damage ─────────────────────────────────────────────
-        if (victim instanceof Player p && isSummoner(p)) {
+        if (victim instanceof Player p && isActiveSummoner(p)) {
             // Guardian brief invuln
             Long invul = guardianInvulExpiry.get(p.getUniqueId());
             if (invul != null && now() < invul) { e.setCancelled(true); return; }
@@ -1029,7 +1037,7 @@ public class SummonerAbilityListener implements Listener {
 
         // ── Case B: a hostile mob is targeting a summoner player ───────────────
         if (!(attacker instanceof Mob mob) || isMinion(attacker)) return;
-        if (!(target instanceof Player p) || !isSummoner(p)) return;
+        if (!(target instanceof Player p) || !isActiveSummoner(p)) return;
 
         List<UUID> minions = getMinions(p);
         if (minions.isEmpty()) return;
@@ -1070,11 +1078,11 @@ public class SummonerAbilityListener implements Listener {
         // ── Minion scored kill → Soul Harvest charge ──────────────────────────
         if (killer != null && isMinion(killer)) {
             Player owner = ownerOf(killer);
-            if (owner != null && hasUpgrade(owner, SLOT_SOUL_HARVEST)) awardSoulCharge(owner);
+            if (owner != null && isActiveSummoner(owner) && hasUpgrade(owner, SLOT_SOUL_HARVEST)) awardSoulCharge(owner);
         }
 
         // ── Player scored kill → Soul Harvest charge ──────────────────────────
-        if (dead.getKiller() instanceof Player pk && isSummoner(pk)
+        if (dead.getKiller() instanceof Player pk && isActiveSummoner(pk)
                 && hasUpgrade(pk, SLOT_SOUL_HARVEST)) {
             awardSoulCharge(pk);
         }
@@ -1171,6 +1179,18 @@ public class SummonerAbilityListener implements Listener {
     // ─────────────────────────────────────────────────────────────────────────
 
     public void dismissAllMinionsOnReset(Player p) {
+        removeTrackedMinions(p);
+        soulCharges.remove(p.getUniqueId());
+        frenzyStacks.remove(p.getUniqueId());
+        frenzyLastDeathTime.remove(p.getUniqueId());
+        commandTarget.remove(p.getUniqueId());
+        downedMinions.removeIf(uid -> {
+            Entity e = Bukkit.getEntity(uid);
+            return e == null || ownerOf(e) == null || ownerOf(e).equals(p);
+        });
+    }
+
+    private void removeTrackedMinions(Player p) {
         for (UUID uid : new ArrayList<>(getMinions(p))) {
             Entity e = Bukkit.getEntity(uid);
             if (e != null) {
@@ -1181,23 +1201,15 @@ public class SummonerAbilityListener implements Listener {
         playerMinions.remove(p.getUniqueId());
         soulBondMinion.remove(p.getUniqueId());
         soulBondRespawnAt.remove(p.getUniqueId());
-        soulCharges.remove(p.getUniqueId());
-        frenzyStacks.remove(p.getUniqueId());
-        frenzyLastDeathTime.remove(p.getUniqueId());
-        commandTarget.remove(p.getUniqueId());
-        downedMinions.removeIf(uid -> {
-            Entity e = Bukkit.getEntity(uid);
-            return e == null || ownerOf(e) == null || ownerOf(e).equals(p);
-        });
     }
-    
+
     private void startPeriodicTasks() {
 
         // Leash — teleport stray minions back every second
         new BukkitRunnable() {
             @Override public void run() {
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (!isSummoner(p)) continue;
+                    if (!isActiveSummoner(p)) continue;
                     double leash = 20.0;
                     for (UUID uid : getMinions(p)) {
                         Entity e = Bukkit.getEntity(uid);
@@ -1217,7 +1229,7 @@ public class SummonerAbilityListener implements Listener {
         new BukkitRunnable() {
             @Override public void run() {
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (!isSummoner(p) || !hasUpgrade(p, SLOT_BLOOD_LINK) || p.isDead()) continue;
+                    if (!isActiveSummoner(p) || !hasUpgrade(p, SLOT_BLOOD_LINK) || p.isDead()) continue;
                     int alive = getMinions(p).size();
                     if (alive > 0) {
                         double maxHp = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
@@ -1231,7 +1243,7 @@ public class SummonerAbilityListener implements Listener {
         new BukkitRunnable() {
             @Override public void run() {
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (!isSummoner(p) || !hasUpgrade(p, SLOT_SOUL_HARVEST)) continue;
+                    if (!isActiveSummoner(p) || !hasUpgrade(p, SLOT_SOUL_HARVEST)) continue;
                     Long last = lastKillTime.get(p.getUniqueId());
                     if (last != null && (now() - last) > 15_000L && soulCharges.getOrDefault(p.getUniqueId(), 0) > 0) {
                         soulCharges.put(p.getUniqueId(), 0);
@@ -1245,7 +1257,7 @@ public class SummonerAbilityListener implements Listener {
         new BukkitRunnable() {
             @Override public void run() {
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (!isSummoner(p) || !"plaguemaster".equals(subclass(p))
+                    if (!isActiveSummoner(p) || !"plaguemaster".equals(subclass(p))
                             || !hasUpgrade(p, SLOT_VIRULENT_SWARM)) continue;
                     for (UUID uid : getMinions(p)) {
                         Entity minion = Bukkit.getEntity(uid);
@@ -1263,7 +1275,12 @@ public class SummonerAbilityListener implements Listener {
         new BukkitRunnable() {
             @Override public void run() {
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (!isSummoner(p) || !hasUpgrade(p, SLOT_SOUL_BOND)) continue;
+                    if (!isSummoner(p)) continue;
+                    if (!plugin.isWorldAllowed(p)) {
+                        removeTrackedMinions(p);
+                        continue;
+                    }
+                    if (!hasUpgrade(p, SLOT_SOUL_BOND)) continue;
                     if (!isSoulBondRespawnDue(soulBondRespawnAt.get(p.getUniqueId()), now())) continue;
                     UUID cur = soulBondMinion.get(p.getUniqueId());
                     if (cur == null) { startSoulBondIfNeeded(p); continue; }
@@ -1277,7 +1294,7 @@ public class SummonerAbilityListener implements Listener {
         new BukkitRunnable() {
             @Override public void run() {
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (!isSummoner(p) || !hasUpgrade(p, SLOT_RITE_OF_COMMAND)) continue;
+                    if (!isActiveSummoner(p) || !hasUpgrade(p, SLOT_RITE_OF_COMMAND)) continue;
                     UUID markedUID = commandTarget.get(p.getUniqueId());
                     if (markedUID == null) continue;
                     Entity target = Bukkit.getEntity(markedUID);
@@ -1295,7 +1312,7 @@ public class SummonerAbilityListener implements Listener {
         new BukkitRunnable() {
             @Override public void run() {
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (!isSummoner(p) || !hasUpgrade(p, SLOT_BLOOD_FRENZY)) continue;
+                    if (!isActiveSummoner(p) || !hasUpgrade(p, SLOT_BLOOD_FRENZY)) continue;
                     Long last = frenzyLastDeathTime.get(p.getUniqueId());
                     if (last != null && (now() - last) > 10_000L) {
                         if (frenzyStacks.getOrDefault(p.getUniqueId(), 0) > 0) {
@@ -1314,7 +1331,7 @@ public class SummonerAbilityListener implements Listener {
         new BukkitRunnable() {
             @Override public void run() {
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (!isSummoner(p)) continue;
+                    if (!isActiveSummoner(p)) continue;
                     UUID markedUID = commandTarget.get(p.getUniqueId());
                     for (UUID uid : new ArrayList<>(getMinions(p))) {
                         Entity minion = Bukkit.getEntity(uid);

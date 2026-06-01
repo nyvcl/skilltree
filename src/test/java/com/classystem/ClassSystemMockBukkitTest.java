@@ -115,6 +115,23 @@ class ClassSystemMockBukkitTest {
     }
 
     @Test
+    void summonerMinionsDoNotSpawnInBlockedWorlds() {
+        plugin.getConfig().set("valid-worlds", List.of("world"));
+        World blocked = server.addSimpleWorld("blocked");
+        PlayerMock player = server.addPlayer("BlockedNecro");
+        player.teleport(new Location(blocked, 0, 64, 0));
+        plugin.getPlayerDataManager().setClass(player, "summoner");
+        plugin.getPlayerDataManager().addTreePane(player, 50);
+        ItemStack staff = com.classystem.listener.SummonerAbilityListener.createSummonStaff(plugin);
+        player.getInventory().setItemInMainHand(staff);
+
+        callStaffInteract(player, Action.RIGHT_CLICK_AIR);
+        server.getScheduler().performTicks(65);
+
+        assertEquals(0, countZombies(blocked));
+    }
+
+    @Test
     void skillTreeCommandRequiresAClassThenOpensTreeAfterClassIsSet() {
         PlayerMock player = server.addPlayer("Warrior");
 
