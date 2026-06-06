@@ -290,7 +290,7 @@ classes:
           slot: 25
           display-name: "§6Armor Pierce"
           lore:
-            - "§7Arrows ignore 25% of the"
+            - "§7Arrows ignore 15% of the"
             - "§7target's armor value."
             - "§8Passive — always active."
           money-cost: 1000
@@ -473,7 +473,7 @@ classes:
         display-name: "§5Awakening"
         lore:
           - "§6Arcane Milestone"
-          - "§7+20% max mana."
+          - "§7+40% max mana."
           - "§7Grants a persistent particle aura."
           - "§7Unlocks both branches."
         item: NETHER_STAR
@@ -813,9 +813,7 @@ classes:
           display-name: "§cBlood Link"
           lore:
             - "§6Titan Branch Milestone"
-            - "§730% of damage your minion takes"
-            - "§7is redirected to you."
-            - "§7In return you §aheal 1 heart §7every 5s"
+            - "§7You §aheal 1 heart §7every 5s"
             - "§7per living Titan minion."
             - "§8Passive — always active."
           item: NETHERITE_AXE

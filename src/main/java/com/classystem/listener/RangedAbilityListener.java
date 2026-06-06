@@ -150,6 +150,10 @@ public class RangedAbilityListener implements Listener {
         return Math.min(0.40, Math.floor(distance / 5.0) * 0.05);
     }
 
+    static double armorPierceMultiplier() {
+        return 1.15;
+    }
+
     /** Resolve the shooter of an arrow back to a Player, or null. */
     private Player getShooter(Arrow arrow) {
         if (arrow.getShooter() instanceof Player p) return p;
@@ -494,12 +498,10 @@ public class RangedAbilityListener implements Listener {
             }
         }
 
-        // ── Armor Pierce: ignore 25% of armor ────────────────────────────────
+        // ── Armor Pierce: ignore 15% of armor ────────────────────────────────
         if (hasUpgrade(p, SLOT_ARMOR_PIERCE) && victim instanceof Player target) {
-            // Spigot: reduce the effective damage by bypassing 25% of armor absorption.
-            // Simplest implementation: boost raw damage by 25% / (1 - armorFactor).
-            // We apply a flat 25% bonus to represent pierce.
-            dmg *= 1.25;
+            // Spigot does not expose partial armor bypass here, so a flat boost represents pierce.
+            dmg *= armorPierceMultiplier();
         }
 
         // ── Deadeye: +5% per 5 blocks of travel, cap +40% at 40 blocks ───────

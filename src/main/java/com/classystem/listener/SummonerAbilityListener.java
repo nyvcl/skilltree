@@ -38,8 +38,7 @@ import java.util.*;
  * ══════════════════════════════════════════════════════════════════════════
  *  BRANCH A — TITAN (Quality / Control)
  *  slot 33  IRON_FLESH        — minion +100% max HP, knockback resistance, iron-armour skin
- *  slot 34  BLOOD_LINK        — branch milestone: 30% dmg minion takes redirected to owner;
- *                               heal 1 heart per 5s per living Titan minion
+ *  slot 34  BLOOD_LINK        — branch milestone: heal 1 heart per 5s per living Titan minion
  *  slot 25  COLOSSUS_STRIKE   — minion attacks apply Slowness II 2s; 20% chance knockback
  *  slot 24  UNDYING_TITAN     — on death, minion enters 10s downed state (can't attack, won't die)
  *
@@ -187,6 +186,10 @@ public class SummonerAbilityListener implements Listener {
 
     static boolean isSoulBondRespawnDue(Long respawnAt, long currentTime) {
         return respawnAt == null || currentTime >= respawnAt;
+    }
+
+    static double bloodLinkOwnerDamageFromMinionAttack(double minionAttackDamage) {
+        return 0.0;
     }
 
     private String subclass(Player p) { return pdm.getSubclass(p); }
@@ -915,16 +918,6 @@ public class SummonerAbilityListener implements Listener {
             if (hasUpgrade(owner, SLOT_PLAGUE_BEARER) && victim instanceof LivingEntity lvic
                     && lvic.hasPotionEffect(PotionEffectType.POISON)) {
                 dmg *= 1.15;
-            }
-
-            // Blood Link: redirect 30% of minion damage to owner
-            if (hasUpgrade(owner, SLOT_BLOOD_LINK)) {
-                final double redir = dmg * 0.30;
-                new BukkitRunnable() {
-                    @Override public void run() {
-                        if (owner.isOnline() && !owner.isDead()) owner.damage(redir);
-                    }
-                }.runTaskLater(plugin, 1L);
             }
 
             // Apply status effects

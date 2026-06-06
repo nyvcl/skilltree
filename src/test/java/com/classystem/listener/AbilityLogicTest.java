@@ -24,6 +24,26 @@ class AbilityLogicTest {
     }
 
     @Test
+    void armorPierceUsesFifteenPercentDamageBoost() {
+        assertEquals(1.15, RangedAbilityListener.armorPierceMultiplier(), 0.0001);
+    }
+
+    @Test
+    void magicBasicBoltCostsTenManaAndAwakeningGrantsFortyPercentMana() {
+        assertEquals(10.0, MagicAbilityListener.basicBoltManaCost(), 0.0001);
+        assertEquals(100.0, MagicAbilityListener.maxManaForAwakening(false), 0.0001);
+        assertEquals(140.0, MagicAbilityListener.maxManaForAwakening(true), 0.0001);
+    }
+
+    @Test
+    void awakeningAuraOnlyRunsForAllowedWorldMagesWithUpgrade() {
+        assertTrue(MagicAbilityListener.shouldSpawnAwakeningAura(true, true, true));
+        assertFalse(MagicAbilityListener.shouldSpawnAwakeningAura(false, true, true));
+        assertFalse(MagicAbilityListener.shouldSpawnAwakeningAura(true, false, true));
+        assertFalse(MagicAbilityListener.shouldSpawnAwakeningAura(true, true, false));
+    }
+
+    @Test
     void gravityWellOnlyUsesActualBlockRightClick() {
         assertTrue(MagicAbilityListener.shouldRouteGravityWell(Action.RIGHT_CLICK_BLOCK, true));
         assertFalse(MagicAbilityListener.shouldRouteGravityWell(Action.RIGHT_CLICK_AIR, true));
@@ -42,6 +62,11 @@ class AbilityLogicTest {
         assertFalse(SummonerAbilityListener.isSoulBondRespawnDue(5_000L, 4_999L));
         assertTrue(SummonerAbilityListener.isSoulBondRespawnDue(5_000L, 5_000L));
         assertTrue(SummonerAbilityListener.isSoulBondRespawnDue(null, 5_000L));
+    }
+
+    @Test
+    void bloodLinkDoesNotRedirectMinionAttackDamageToOwner() {
+        assertEquals(0.0, SummonerAbilityListener.bloodLinkOwnerDamageFromMinionAttack(20.0), 0.0001);
     }
 
     @Test

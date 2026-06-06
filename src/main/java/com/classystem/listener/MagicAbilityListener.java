@@ -48,8 +48,8 @@ import java.util.*;
  *   13  Phase Step (Riftwalker upgrade)
  *
  * Mana system:
- *   - Base max mana: 100. Awakening milestone: 120.
- *   - Basic bolt costs 15 mana.
+ *   - Base max mana: 100. Awakening milestone: 140.
+ *   - Basic bolt costs 10 mana.
  *   - Heavy (charged) bolt costs 35 mana.
  *   - Mana regenerates at 5/s passively; 10s after last cast.
  *   - Mana bar shown in action bar for 3s after mana changes.
@@ -92,8 +92,8 @@ public class MagicAbilityListener implements Listener {
 
     // ── Mana constants ───────────────────────────────────────────────────────
     private static final double BASE_MAX_MANA          = 100.0;
-    private static final double AWAKENING_MAX_MANA     = 120.0;
-    private static final double BOLT_MANA_COST         = 15.0;
+    private static final double AWAKENING_MAX_MANA     = 140.0;
+    private static final double BOLT_MANA_COST         = 10.0;
     private static final double HEAVY_BOLT_MANA_COST   = 35.0;
     private static final double MANA_REGEN_PASSIVE     = 5.0;   // per second
     private static final int    MANA_BAR_DISPLAY_TICKS = 60;    // 3 seconds
@@ -173,6 +173,18 @@ public class MagicAbilityListener implements Listener {
         return !isSpellAppliedDamage && hasSpellblade && roll < 0.25;
     }
 
+    static double basicBoltManaCost() {
+        return BOLT_MANA_COST;
+    }
+
+    static double maxManaForAwakening(boolean hasAwakening) {
+        return hasAwakening ? AWAKENING_MAX_MANA : BASE_MAX_MANA;
+    }
+
+    static boolean shouldSpawnAwakeningAura(boolean isMagic, boolean hasAwakening, boolean worldAllowed) {
+        return isMagic && hasAwakening && worldAllowed;
+    }
+
     private boolean hasArcaneShackles(Player p) {
         return hasUpgrade(p, SLOT_ARCANE_SHACKLES_C) || hasUpgrade(p, SLOT_ARCANE_SHACKLES_D);
     }
@@ -197,7 +209,7 @@ public class MagicAbilityListener implements Listener {
     // ── Mana management ─────────────────────────────────────────────────────
 
     private double getMaxMana(Player p) {
-        return hasUpgrade(p, SLOT_AWAKENING) ? AWAKENING_MAX_MANA : BASE_MAX_MANA;
+        return maxManaForAwakening(hasUpgrade(p, SLOT_AWAKENING));
     }
 
     private double getMana(Player p) {
@@ -272,7 +284,7 @@ public class MagicAbilityListener implements Listener {
         meta.setDisplayName("§5Arcane Staff");
         meta.setLore(Arrays.asList(
                 "§7An instrument of arcane power.",
-                "§5Right-click §7— Fire magic bolt (15 mana)",
+                "§5Right-click §7— Fire magic bolt (10 mana)",
                 "§5Shift+Right-click §7— Charge cast / Phase Step",
                 "§5Left-click §7— Rift Anchor (Riftwalker only)",
                 "§8This staff channels the Weave."
@@ -965,8 +977,7 @@ public class MagicAbilityListener implements Listener {
         new BukkitRunnable() {
             @Override public void run() {
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (!isMagic(p)) continue;
-                    if (!hasUpgrade(p, SLOT_AWAKENING)) continue;
+                    if (!shouldSpawnAwakeningAura(isMagic(p), hasUpgrade(p, SLOT_AWAKENING), plugin.isWorldAllowed(p))) continue;
                     p.getWorld().spawnParticle(Particle.WITCH,
                             p.getLocation().add(0, 1, 0), 2, 0.3, 0.5, 0.3, 0.01);
                 }
